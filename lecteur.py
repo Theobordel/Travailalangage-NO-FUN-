@@ -3,18 +3,19 @@ f = open('test.txt','r')
 Q = []
 alphabet = []
 F = []
-info = (Q,alphabet,F)
+info = [Q,alphabet,F]
 
-l = f.readline()
+#l = f.readline()#
 
 def lecteurExt1(ligne,tablaux):
     p = len(ligne) 
     i = 0
     tablaux = []
-    print(p,i)
+    print(p,i,ligne)
     caractaire = ""
             
     while ligne[i] != "{":
+        print(i)
         i = i+1
     while p > i:
 
@@ -31,12 +32,12 @@ def lecteurExt1(ligne,tablaux):
     return tablaux
 
 def lecteurExt(tablaux):
-    for i in range(3) :
+    for i in range(4) :
         l = f.readline()
         info[i] = lecteurExt1(l,tablaux)
+    return info
 
 #print(l) 
 #print(content)
-print(l)
 print(lecteurExt(info))
 
