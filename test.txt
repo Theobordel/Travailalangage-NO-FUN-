@@ -1,6 +1,6 @@
 Q = {A,B,C} (ensmble d'etats)
 ε = {au,to,mate} (alphabet)
-F = {A} (état final)
+F = {A,b} (état final)
 q0 ={C} (etat intial)
 δ(A,to)= B
 δ(B,to)= B
