@@ -32,6 +32,9 @@ def lecteurExt1(ligne,tablaux):
                 caractaire =""
             else:
                 caractaire = caractaire + ligne[i]
+        if caractaire == "":
+            print("ereur dans le format ou un champ manquant")
+            exit()
         tablaux.append(caractaire)    
         return tablaux
     except:
