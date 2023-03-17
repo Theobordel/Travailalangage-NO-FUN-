@@ -21,7 +21,7 @@ class Automate:
         #ajoute un état à la liste des états
         #si un état est déjà dans la liste des états, on ne l'ajoute pas
         if etat in moi.etats:
-            print("error : l'etat '" + etat + "' already exists.")
+            print("erreur : l'etat " + etat + "n'existe pas.")
             return
         moi.transitions[etat] = []
         moi.etats.append(etat)
@@ -41,7 +41,7 @@ class Automate:
         #src_state : l'état source
         #symbol : le symbole à transmettre
         if src_etat not in moi.etats:
-            print("error : the state '" + src_etat + "' is not an existing state.")
+            print("erreur : l'etat " + src_etat + " n'existe pas.")
             return
         for (s, dst_etat) in moi.transitions[src_etat]:
             if s == symbol:
@@ -52,17 +52,17 @@ class Automate:
         #ajoute une transition entre l'état source et le symbole et l'état destination
         #ds_state : l'état destination
         if not moi.valid_symbol(symbol):
-            print("error : the symbol '" + symbol + "' is not part of the alphabet.")
+            print("erreur : le symbole " + symbol + " n'existe pas dan sl'alphabet.")
             return
         if src_etat not in moi.etats:
-            print("error : the state '" + src_etat + "' is not an existing state.")
+            print("erreur : l'état " + src_etat + " n'existe pas.")
             return
         if dst_etat not in moi.etats:
-            print("error : the state '" + dst_etat + "' is not an existing state.")
+            print("erreur : l'état" + dst_etat + " n'existe pas.")
             return
     
         if moi.dst_etat(src_etat, symbol) != None:
-            print("error : the transition (" + src_etat + ", " + symbol + ", ...) already exists.")
+            print("erreur : la transition (" + src_etat + ", " + symbol + ", ...) existe déjà.")
             return
     
         moi.transitions[src_etat].append((symbol, dst_etat))
@@ -70,7 +70,7 @@ class Automate:
     def __str__(moi):
         #retourne une chaîne de caractères représentant l'automate
         ret = "FA :\n"
-        ret += "   - alphabet   : '" + moi.alphabet + "'\n"
+        ret += "   - alphabet   : " + moi.alphabet + "\n"
         ret += "   - init       : " + str(moi.init) + "\n"
         ret += "   - finals     : " + str(moi.finals) + "\n"
         ret += "   - etats (%d) :\n" % (len(moi.etats))
@@ -88,19 +88,20 @@ class Automate:
 
 
 def run(automate, mot):
+    Automate.alphabet = "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
         #fonction qui permet de tester l'automate sur une phrase donnée
-    current_state = automate.init
+    etat_courant = automate.init
     #initialise l'état courant à l'état initiaux
     for symbol in mot:
         #pour chaque symbole de la phrase, on cherche la transition correspondante et l'état courant
-        next_state = automate.dst_etat(current_state, symbol)
+        etat_suivant = automate.dst_etat(etat_courant, symbol)
         #si la transition n'existe pas, la fonction retourne False
-        if next_state == None:
-            return False;
-        current_state = next_state
+        if etat_suivant == None:
+            return False
+        etat_courant = etat_suivant
         i = i+1
     #si l'état courant est un état final, la fonction retourne True
-    if current_state in automate.finals:
+    if etat_courant in automate.finals:
         return True
     return False
 
