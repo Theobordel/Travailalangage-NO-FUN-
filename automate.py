@@ -10,11 +10,8 @@ class Automate:
         #initialise la liste des états initiaux
         moi.finals = []
         #initialise la liste des états finaux
-        moi.alphabet = ""
-        #initialise l'alphabet
-        for s in alphabet:
-            if s not in moi.alphabet:
-                moi.alphabet += s
+        moi.alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",".","@"}
+        #initialisation de l'alphabet
         
 
     def add_state(moi, etat, final = False):
@@ -29,11 +26,11 @@ class Automate:
             moi.finals.append(etat)
 
 
-
     def valid_symbol(moi, symbol):
         #vérifie si le symbole est dans l'alphabet
         if symbol not in moi.alphabet: return False
         return True
+    
     
     def dst_etat(moi, src_etat, symbol):
         #cherche la transition correspondant à l'état source et le symbole et retourne 
@@ -52,7 +49,7 @@ class Automate:
         #ajoute une transition entre l'état source et le symbole et l'état destination
         #ds_state : l'état destination
         if not moi.valid_symbol(symbol):
-            print("erreur : le symbole " + symbol + " n'existe pas dan sl'alphabet.")
+            print("erreur : le symbole " + symbol + " n'existe pas dans l'alphabet.")
             return
         if src_etat not in moi.etats:
             print("erreur : l'état " + src_etat + " n'existe pas.")
@@ -69,27 +66,27 @@ class Automate:
 
     def __str__(moi):
         #retourne une chaîne de caractères représentant l'automate
-        ret = "FA :\n"
-        ret += "   - alphabet   : " + moi.alphabet + "\n"
-        ret += "   - init       : " + str(moi.init) + "\n"
-        ret += "   - finals     : " + str(moi.finals) + "\n"
-        ret += "   - etats (%d) :\n" % (len(moi.etats))
-        for state in moi.etats:
-            ret += "       - (%s)" % (state)
-            if len(moi.transitions[state]) == 0:
+        ret = "Automate :\n"
+        ret += "   - Alphabet   : " + {moi.alphabet} + "\n"
+        ret += "   - Etats initiaux       : " + {str(moi.init)} + "\n"
+        ret += "   - Etats finauux     : " + {str(moi.finals)} + "\n"
+        ret += "   - Etats (%d) :\n" % {(len(moi.etats))} + "\n"
+        ret += "   - Transitions(%d) :\n" + {moi.transitions}
+        for etat in moi.etats:
+            ret += "       - (%s)" % (etat)
+            if len(moi.transitions[etat]) == 0:
                 ret += ".\n"
             else:
                 ret += ret + ":\n"
-                for (symbol, destination) in moi.transitions[state]:
+                for (symbol, destination) in moi.transitions[etat]:
                     ret += ret + "          --(%s)--> (%s)\n" % (symbol, destination)
         return ret
     
 
 
 
-def run(automate, mot):
-    Automate.alphabet = "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-        #fonction qui permet de tester l'automate sur une phrase donnée
+def run(automate, mot):        
+    #fonction qui permet de tester l'automate sur une phrase donnée
     etat_courant = automate.init
     #initialise l'état courant à l'état initiaux
     for symbol in mot:
@@ -104,6 +101,15 @@ def run(automate, mot):
     if etat_courant in automate.finals:
         return True
     return False
+
+def mot_fonctionne(automate, mot):
+    #fonction qui permet de tester l'automate sur une mot donnée
+    if run(automate, mot):
+        print("mot trouvé")
+    else:
+        print("mot non trouvé")
+
+
 
 
 def enregistrer(automate, fichier):
@@ -120,3 +126,13 @@ def enregistrer(automate, fichier):
             exec(compile(open(fichier).read(), fichier, 'exec'), globals(), var_locale)
         return var_locale["a"]
     
+
+# compléter un automate
+
+def compléter_automate(automate, mot):
+   if mot.add_state(automate, "a"):
+       if  automate.valid_symbol():
+           if not automate.dst_etat():
+               automate.add_transition(automate, "a")
+            
+
