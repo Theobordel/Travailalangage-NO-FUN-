@@ -98,7 +98,31 @@ def aujoutrensition(automate):
         ligne = fichier.readline()
     
 
+
+def cree_etas_poubelle(automate,nom_poubelle):
+    automate.add_state(nom_poubelle,False)
+    for i in automate.alphabet:
+        automate.add_transition(nom_poubelle,i,nom_poubelle)
     
+def completer_automate(automate,nom_poubelle):
+    cree_etas_poubelle(automate,nom_poubelle)
+    for etas in automate.transitions:
+        for lettre in range(len(automate.alphabet)):
+            trouvee = 0
+            for p in range(len(automate.transitions[etas])):
+                if automate.alphabet[lettre-1] == automate.transitions[etas][p][0]:
+                    trouvee = 1
+            if trouvee == 0:
+                automate.add_transition(etas,automate.alphabet[lettre],nom_poubelle)
+
+
+def compléter_automate(automate, mot):
+   if mot.add_state(automate, "a"):
+       if  automate.valid_symbol():
+           if not automate.dst_etat():
+               automate.add_transition(automate, "a")
+
+
 #print(l) 
 #print(content)
 info = lecteurExt(info)
@@ -106,7 +130,6 @@ print(info)
 automate1 = model.automate()
 aujoutautomate(info,automate1)
 aujoutrensition(automate1)
+completer_automate(automate1,"p")
 print(automate1.transitions)
-print("toto")
-##print(automate1)
-print("tata")
+

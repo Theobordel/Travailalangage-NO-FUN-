@@ -45,17 +45,17 @@ class automate:
     
     def add_transition(self, src_state, symbol, dst_state):
         if not self.valid_symbol(symbol):
-            print("error : the symbol '" + symbol + "' is not part of the alphabet.")
+            print("error : the symbol '",symbol,"' is not part of the alphabet.")
             return
         if src_state not in self.states:
-            print("error : the state '" + src_state + "' is not an existing state.")
+            print("error : the state '",src_state,"' is not an existing state.")
             return
         if dst_state not in self.states:
-            print("error : the state '" + dst_state + "' is not an existing state.")
+            print("error : the state '",dst_state,"' is not an existing state.")
             return
     
         if self.dst_state(src_state, symbol) != None:
-            print("error : the transition (" + src_state + ", " + symbol + ", ...) already exists.")
+            print("error : the transition (",src_state,", ",symbol,", ...) already exists.")
             return
     
         self.transitions[src_state].append((symbol, dst_state))
