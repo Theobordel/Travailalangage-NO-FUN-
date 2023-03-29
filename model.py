@@ -1,10 +1,95 @@
-nom_etas = ('toto','tata')
+class automate:
 
-def créesScelette(nb_etas,nom_etas):
-    automate = [[]]
-    for i in range(nb_etas):
-        automate[0].append(nom_etas)
-    print(automate)
-    return automate
+    def __init__(self):
+        self.states = []
+        self.transitions = {}
+        self.init = None
+        self.finals = []
+        self.alphabet = []
+
+
+    def add_letre(self,lettre):
+        if lettre in self.alphabet:
+            print("error : lettre '" + lettre + "' already exists.")
+            return
+        self.alphabet.append(lettre)
+
+        
+            
+
+
+    def add_state(self, state, final = False):
+        if state in self.states:
+            print("error : state '" + state + "' already exists.")
+            return
+        self.transitions[state] = []
+        self.states.append(state)
+        if final:
+            self.finals.append(state)
+        return
+
+
+
+    def valid_symbol(self, symbol):
+        if symbol not in self.alphabet: return False
+        return True
     
-créesScelette(2,nom_etas)
+    def dst_state(self, src_state, symbol):
+        if src_state not in self.states:
+            print("error : the state '" + src_state + "' is not an existing state.")
+            return
+        for (s, dst_state) in self.transitions[src_state]:
+            if s == symbol:
+                return dst_state
+        return None
+    
+    def add_transition(self, src_state, symbol, dst_state):
+        if not self.valid_symbol(symbol):
+            print("error : the symbol '" + symbol + "' is not part of the alphabet.")
+            return
+        if src_state not in self.states:
+            print("error : the state '" + src_state + "' is not an existing state.")
+            return
+        if dst_state not in self.states:
+            print("error : the state '" + dst_state + "' is not an existing state.")
+            return
+    
+        if self.dst_state(src_state, symbol) != None:
+            print("error : the transition (" + src_state + ", " + symbol + ", ...) already exists.")
+            return
+    
+        self.transitions[src_state].append((symbol, dst_state))
+
+    def __str__(self):
+        ret = "FA :\n"
+        ##for alphabet in self.alphabet:
+         ##   ret += "- (%s)" % (alphabet)
+         ##   ret += ".\n"
+                
+        ret += "   - init       : " + str(self.init) + "\n"
+        ret += "   - finals     : " + str(self.finals) + "\n"
+        ret += "   - states (%d) :\n" % (len(self.states))
+        for state in self.states:
+            ret += "       - (%s)" % (state)
+            if len(self.transitions[state]) is 0:
+                ret += ".\n"
+            else:
+                ret += ret + ":\n"
+                for (sym, dest) in self.transitions[state]:
+                    ret += ret + "          --(%s)--> (%s)\n" % (sym, dest)
+        return ret
+
+def run(automate, word):
+    current_state = automate.init
+
+    for symbol in word:
+        next_state = automate.dst_state(current_state, symbol)
+        if next_state is None:
+            return False
+
+        current_state = next_state
+        i = i+1
+
+    if current_state in automate.finals:
+        return True
+    return False
