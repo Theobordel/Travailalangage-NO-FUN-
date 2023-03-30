@@ -109,6 +109,8 @@ class automate:
     def determinisation(self):
         if self.est_deterministe():
             return
+        else:
+            return "determinisation wip"
 
     def sauvegarde_ext(self,chose,fichier):
         for i in range(len(chose)):
@@ -132,9 +134,21 @@ class automate:
                 for i in range(len(self.transitions[etas])):
                     f.write("delta("+etas+","+str(self.transitions[etas][i][0])+") = "+str(self.transitions[etas][i][1])+"\n")
 
+    def to_dot(self):
+        print("wip")
 
-
-
+    def accepte_mot(self,mot):
+        etas = self.init[0]
+        prochinetas = etas
+        for lettre in mot:
+            for lettretren in range(len(self.transitions[etas])):
+                if lettre == self.transitions[etas][lettretren][1]:
+                    prochinetas = self.transitions[etas][lettretren][2]
+            etas = prochinetas
+        for i in self.finals:
+            if etas == i:
+                return True
+        return False
                 
 
 

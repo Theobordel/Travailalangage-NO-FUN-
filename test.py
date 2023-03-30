@@ -1,3 +1,7 @@
+
+
+dot = graphViz.diagraph()
+
 conerie = 1000^4
 mon_tab = [1,0,0,0]
 
