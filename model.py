@@ -104,7 +104,39 @@ class automate:
                     vue.append(self.transitions[etas][lettre][0])
 
      
-        return True    
+        return True
+    
+    def determinisation(self):
+        if self.est_deterministe():
+            return
+
+    def sauvegarde_ext(self,chose,fichier):
+        for i in range(len(chose)):
+            if i != len(chose)-1:
+                fichier.write(chose[i]+",")
+            else:
+                fichier.write(chose[i]+"}\n")
+
+    
+    def sauvegarde(self,nom_fichier):
+        with open(nom_fichier, mode="w") as f:
+            f.write("Q = {")
+            self.sauvegarde_ext(self.states,f)
+            f.write("Epsilon = {")
+            self.sauvegarde_ext(self.alphabet,f)
+            f.write("F = {")
+            self.sauvegarde_ext(self.finals,f)
+            f.write("q0 ={")
+            self.sauvegarde_ext(self.init,f)
+            for etas in self.states:  
+                for i in range(len(self.transitions[etas])):
+                    f.write("delta("+etas+","+str(self.transitions[etas][i][0])+") = "+str(self.transitions[etas][i][1])+"\n")
+
+
+
+
+                
+
 
 
 def run(automate, word):

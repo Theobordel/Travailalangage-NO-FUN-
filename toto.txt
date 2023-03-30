@@ -1,0 +1,16 @@
+Q = {A,B,C,p}
+Epsilon = {au,to,mate}
+F = {A,B}
+q0 ={C}
+delta(A,to) = B
+delta(A,au) = p
+delta(A,mate) = p
+delta(B,to) = B
+delta(B,mate) = C
+delta(B,au) = A
+delta(C,to) = C
+delta(C,mate) = B
+delta(C,au) = A
+delta(p,au) = p
+delta(p,to) = p
+delta(p,mate) = p
