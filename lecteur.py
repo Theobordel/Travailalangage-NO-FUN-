@@ -2,7 +2,7 @@ import model
 
 
 try :
-    fichier = open('test.txt','r')
+    fichier = open('test2.txt','r')
 except :
     print("fichier nas pas pus etres")
     exit("ereur")
@@ -123,3 +123,4 @@ automate1.completer_automate("p")
 print(automate1)
 print(automate1.est_deterministe())
 automate1.sauvegarde("toto.txt")
+print(automate1.accepte_mot("cbbbaa"))

@@ -1,0 +1,11 @@
+Q = {A,B,C} (ensmble d'etats)
+ε = {a,b,c} (alphabet)
+F = {A,B} (état final)
+q0 ={C} (etat intial)
+δ(A,b)= B
+δ(B,b)= B
+δ(C,b)= C
+δ(C,c)= B
+δ(B,c)= C
+δ(C,a)= A
+δ(B,a)= A

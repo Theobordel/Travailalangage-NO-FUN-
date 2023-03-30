@@ -142,10 +142,13 @@ class automate:
         prochinetas = etas
         for lettre in mot:
             for lettretren in range(len(self.transitions[etas])):
-                if lettre == self.transitions[etas][lettretren][1]:
-                    prochinetas = self.transitions[etas][lettretren][2]
+                print(etas,self.transitions[etas][lettretren][1],lettre)
+                if lettre == self.transitions[etas][lettretren][0]:
+                    prochinetas = self.transitions[etas][lettretren][1]
             etas = prochinetas
+        print(etas)
         for i in self.finals:
+            print(i,"toto")
             if etas == i:
                 return True
         return False
@@ -163,6 +166,7 @@ def run(automate, word):
 
         current_state = next_state
         i = i+1
+
     if current_state in automate.finals:
         return True
     return False
