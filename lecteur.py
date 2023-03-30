@@ -5,7 +5,7 @@ try :
     fichier = open('test.txt','r')
 except :
     print("fichier nas pas pus etres")
-    exit()
+    exit("ereur")
 
 Q = []
 alphabet = []
@@ -32,16 +32,20 @@ def lecteurExt1(ligne,tablaux):
             if ligne[i]== ",":
                 tablaux.append(caractaire)
                 caractaire =""
+                print(caractaire,"tata")
+
             else:
                 caractaire = caractaire + ligne[i]
+                print(caractaire,"toto")
+
         if caractaire == "":
-            print("ereur dans le format ou un champ manquant")
-            exit()
+
+            exit("ereurv dans le format ou un champ manquant")
         tablaux.append(caractaire)    
         return tablaux
     except:
-        print("ereur dans le format")
-        exit()
+
+        exit("ereur dans le format")
     
 
 def lecteurExt(tablaux):
@@ -58,6 +62,8 @@ def aujoutautomate(tablaux,automate):
         automate.add_state(i,True)
     for i in tablaux[0]:
         automate.add_state(i,False)
+    for i in tablaux[3]:
+        automate.add_init(i)
     for i in tablaux[1]:
         automate.add_letre(i)
 def aujoutetas_ext(ligne,tablaux):
@@ -76,16 +82,14 @@ def aujoutetas_ext(ligne,tablaux):
                 caractaire =""
             elif ligne[i]!= " " and ligne[i]!="=" and ligne[i]!="\n":
                 caractaire = caractaire + ligne[i]
-            elif ligne[i] == "\0":
+            elif ligne[i] == "\0":  
                 break
         if caractaire == "":
-            print("ereur dans le format ou un champ manquant")
-            exit()
+            exit("ereur dans le format ou un champ manquant")
         tablaux.append(caractaire)    
         return tablaux
     except:
-        print("ereur dans le format")
-        exit()
+        exit("ereur dans le format")
   
 
 def aujoutrensition(automate):
@@ -99,28 +103,13 @@ def aujoutrensition(automate):
     
 
 
-def cree_etas_poubelle(automate,nom_poubelle):
-    automate.add_state(nom_poubelle,False)
-    for i in automate.alphabet:
-        automate.add_transition(nom_poubelle,i,nom_poubelle)
-    
-def completer_automate(automate,nom_poubelle):
-    cree_etas_poubelle(automate,nom_poubelle)
-    for etas in automate.transitions:
-        for lettre in range(len(automate.alphabet)):
-            trouvee = 0
-            for p in range(len(automate.transitions[etas])):
-                if automate.alphabet[lettre-1] == automate.transitions[etas][p][0]:
-                    trouvee = 1
-            if trouvee == 0:
-                automate.add_transition(etas,automate.alphabet[lettre],nom_poubelle)
-
-
 def compléter_automate(automate, mot):
    if mot.add_state(automate, "a"):
        if  automate.valid_symbol():
            if not automate.dst_etat():
                automate.add_transition(automate, "a")
+
+
 
 
 #print(l) 
@@ -130,6 +119,6 @@ print(info)
 automate1 = model.automate()
 aujoutautomate(info,automate1)
 aujoutrensition(automate1)
-completer_automate(automate1,"p")
-print(automate1.transitions)
-
+automate1.completer_automate("p")
+print(automate1)
+print(automate1.est_deterministe())

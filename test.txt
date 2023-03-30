@@ -1,7 +1,7 @@
 Q = {A,B,C} (ensmble d'etats)
 ε = {au,to,mate} (alphabet)
 F = {A,B} (état final)
-q0 ={C} (etat intial)
+q0 ={A} (etat intial)
 δ(A,to)= B
 δ(B,to)= B
 δ(C,to)= C

@@ -3,7 +3,7 @@ class automate:
     def __init__(self):
         self.states = []
         self.transitions = {}
-        self.init = None
+        self.init = []
         self.finals = []
         self.alphabet = []
 
@@ -14,7 +14,15 @@ class automate:
             return
         self.alphabet.append(lettre)
 
-        
+    def add_init(self,states):
+        if states in self.states:
+            if states in self.init:
+                print("error : etas deja inicial")
+                return
+            else :
+                self.init.append(states)
+        else :
+            print("error : state do not exist")
             
 
 
@@ -54,30 +62,50 @@ class automate:
             print("error : the state '",dst_state,"' is not an existing state.")
             return
     
-        if self.dst_state(src_state, symbol) != None:
-            print("error : the transition (",src_state,", ",symbol,", ...) already exists.")
-            return
-    
+
         self.transitions[src_state].append((symbol, dst_state))
 
     def __str__(self):
-        ret = "FA :\n"
-        ##for alphabet in self.alphabet:
-         ##   ret += "- (%s)" % (alphabet)
-         ##   ret += ".\n"
+        print("-----------------------------")
+        print(self.states)
+        print(self.alphabet)
+        print(self.finals)
+        print(self.init)
+        for i in self.transitions:
+            print(i,"-->", self.transitions[i])
+        return "-----------------------------------"
+    def cree_etas_poubelle(self,nom_poubelle):
+        self.add_state(nom_poubelle,False)
+        for i in self.alphabet:
+            self.add_transition(nom_poubelle,i,nom_poubelle)
+
+    def completer_automate(self,nom_poubelle):
+        self.cree_etas_poubelle(nom_poubelle)
+        for etas in self.transitions:
+            for lettre in range(len(self.alphabet)):
+                trouvee = 0
+                for p in range(len(self.transitions[etas])):
+                    if self.alphabet[lettre] == self.transitions[etas][p][0]:
+                        trouvee = 1
                 
-        ret += "   - init       : " + str(self.init) + "\n"
-        ret += "   - finals     : " + str(self.finals) + "\n"
-        ret += "   - states (%d) :\n" % (len(self.states))
-        for state in self.states:
-            ret += "       - (%s)" % (state)
-            if len(self.transitions[state]) is 0:
-                ret += ".\n"
-            else:
-                ret += ret + ":\n"
-                for (sym, dest) in self.transitions[state]:
-                    ret += ret + "          --(%s)--> (%s)\n" % (sym, dest)
-        return ret
+                if trouvee == 0:
+                    self.add_transition(etas,self.alphabet[lettre],nom_poubelle)
+
+    def est_deterministe(self):
+        if self.init != None:
+            if len(self.init) != 1:
+                return False
+        for etas in self.states:  
+            vue = []
+            for lettre in range(len(self.transitions[etas])):
+                if self.transitions[etas][lettre][0] in vue:
+                    return False
+                else:
+                    vue.append(self.transitions[etas][lettre][0])
+
+     
+        return True    
+
 
 def run(automate, word):
     current_state = automate.init
@@ -89,7 +117,8 @@ def run(automate, word):
 
         current_state = next_state
         i = i+1
-
     if current_state in automate.finals:
         return True
     return False
+
+
