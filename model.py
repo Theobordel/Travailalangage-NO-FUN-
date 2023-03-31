@@ -181,15 +181,26 @@ class automate:
                 for i in range(len(self.transitions[etas])):
                     f.write("delta("+etas+","+str(self.transitions[etas][i][0])+") = "+str(self.transitions[etas][i][1])+"\n")
 
-    def to_dot(self):
+  def to_dot(self):
         dot = graphviz.Digraph()
         dot.attr(rankdir="LR")
+        for k in range(len(self.init)):
+            char = "__"+ str(k+1) +"__"
+            dot.node(char , shape="point")
         for i in range(len(self.states)):
             etas = self.states[i]
-            dot.node(etas , shape="circle")
+            if self.states[i] in self.finals:
+                dot.node(self.states[i] , shape="doublecircle")
+            else:
+                dot.node(etas , shape="circle")
+        for i in range(len(self.init)):
+            char = "__"+ str(i+1) +"__"
+            dot.edge(char,self.init[i])
         for i in range(len(self.states)):
+            etas = self.states[i]
             for j in range(len(self.transitions[etas])):
-                dot.edge(etas, self.transitions[etas][j][1] , label=self.transitions[etas][j][0])
+                print(etas, self.transitions[etas][j][1] , self.transitions[etas][j][0] )
+                dot.edge(etas, self.transitions[etas][j][0] , label=self.transitions[etas][j][1])
         print(dot.source)
 
 
