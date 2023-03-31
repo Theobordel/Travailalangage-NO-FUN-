@@ -1,3 +1,6 @@
+#Objet destiner a etre apeler
+import graphviz
+
 class automate:
 
     def __init__(self):
@@ -107,7 +110,6 @@ class automate:
         return True
         
     def cree_etas_multiple(self,etas): #etas liste
-        print(etas)
         nom = ""
         new_trensi = []
         for i in etas:
@@ -123,65 +125,7 @@ class automate:
         nom = nom.rstrip(nom[1])
         
 
-
-
-    def determiniser(self):
-        print("deter")
-        initial = []
-        if self.est_deterministe1():
-            print("super")
-            return 
-        else:
-            for i in self.init:
-                print(i)
-                initial.append(i)
-            self.cree_etas_multiple(initial)
-        if self.est_deterministe2():
-            print("tata")
-            return
-        else :
-            for etas in self.states:  
-                vue = []
-                duplicas = []
-                for lettre in range(len(self.transitions[etas])):
-                    if self.transitions[etas][lettre][0] in vue:
-                        duplicas = self.transitions[etas][lettre][0]
-                        print("tata")
-                    else:
-                        vue.append(self.transitions[etas][lettre][0])
-                        print(self.transitions[etas][lettre][0])
-            print(vue,"vue")
-            print(duplicas,"toto")
-
-                        #fusioner les transition a partir des etas initiaux
-            #suprimer les etas intiaux (entien)
-            #ajouter le nouvelle etas initial
-            #pour toute trensition duplicative d'un meme etas, crée un nouvelle etas de c'est deux trensition
-            
-
-    def sauvegarde_ext(self,chose,fichier):
-        for i in range(len(chose)):
-            if i != len(chose)-1:
-                fichier.write(chose[i]+",")
-            else:
-                fichier.write(chose[i]+"}\n")
-
-    
-    def sauvegarde(self,nom_fichier):
-        with open(nom_fichier, mode="w") as f:
-            f.write("Q = {")
-            self.sauvegarde_ext(self.states,f)
-            f.write("Epsilon = {")
-            self.sauvegarde_ext(self.alphabet,f)
-            f.write("F = {")
-            self.sauvegarde_ext(self.finals,f)
-            f.write("q0 ={")
-            self.sauvegarde_ext(self.init,f)
-            for etas in self.states:  
-                for i in range(len(self.transitions[etas])):
-                    f.write("delta("+etas+","+str(self.transitions[etas][i][0])+") = "+str(self.transitions[etas][i][1])+"\n")
-
-  def to_dot(self):
+    def to_dot(self):
         dot = graphviz.Digraph()
         dot.attr(rankdir="LR")
         for k in range(len(self.init)):
@@ -203,6 +147,72 @@ class automate:
                 dot.edge(etas, self.transitions[etas][j][0] , label=self.transitions[etas][j][1])
         print(dot.source)
 
+
+    def determiniser(self):
+        initial = []
+        if self.est_deterministe1():
+            return 
+        else:
+            for i in self.init:
+                initial.append(i)
+            self.cree_etas_multiple(initial)
+        if self.est_deterministe2():
+            return
+        else :
+            for etas in self.states:  
+                vue = []
+                duplicas = {}
+                duplicaslettre = []
+                for lettre in range(len(self.transitions[etas])):
+                    lettreactu = self.transitions[etas][lettre][0]
+                    if lettreactu in vue:
+                        if lettreactu in duplicas:
+                            duplicas.append(lettreactu)
+                        else:
+                            duplicas[lettreactu] = []
+                            duplicas[lettreactu].append(self.transitions[etas][lettre][1])
+                            permiere = 0
+                            while lettreactu != self.transitions[etas][permiere][0]:
+                                permiere = permiere +1 
+                            duplicas[lettreactu].append(self.transitions[etas][permiere][1])
+                        
+                    else:
+                        vue.append(lettreactu)
+
+                if duplicas != {}:
+                    for i in duplicas:
+                        print(duplicas)
+                        print(i)
+                        self.cree_etas_multiple(duplicas[i])
+                        p = 0
+                        while self.transitions[etas][len(self.transitions[etas])-1] != self.transitions[etas][p]:
+                            print (p)
+                            if self.transitions[etas][p][0] == i:
+                                self.transitions[etas].pop(p)
+                                p = p-1
+                            self.add_transition(etas,i,duplicas[i])
+                            p = p+1
+    def sauvegarde_ext(self,chose,fichier):
+        for i in range(len(chose)):
+            if i != len(chose)-1:
+                fichier.write(chose[i]+",")
+            else:
+                fichier.write(chose[i]+"}\n")
+
+    
+    def sauvegarde(self,nom_fichier):
+        with open(nom_fichier, mode="w") as f:
+            f.write("Q = {")
+            self.sauvegarde_ext(self.states,f)
+            f.write("Epsilon = {")
+            self.sauvegarde_ext(self.alphabet,f)
+            f.write("F = {")
+            self.sauvegarde_ext(self.finals,f)
+            f.write("q0 ={")
+            self.sauvegarde_ext(self.init,f)
+            for etas in self.states:  
+                for i in range(len(self.transitions[etas])):
+                    f.write("delta("+etas+","+str(self.transitions[etas][i][0])+") = "+str(self.transitions[etas][i][1])+"\n")
 
     def accepte_mot(self,mot):
         etas = self.init[0]
@@ -231,6 +241,10 @@ def run(automate, word):
     if current_state in automate.finals:
         return True
     return False
+
+
+
+
 
 
 
