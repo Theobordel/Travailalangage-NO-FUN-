@@ -168,8 +168,7 @@ class automate:
         for i in range(len(self.states)):
             etas = self.states[i]
             dot.node(etas , shape="circle")
-            for k in range(len(self.transitions[etas])):
-                
+        for i in range(len(self.states)):
             for j in range(len(self.transitions[etas])):
                 dot.edge(etas, self.transitions[etas][j][1] , label=self.transitions[etas][j][0])
         print(dot.source)
