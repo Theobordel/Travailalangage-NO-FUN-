@@ -112,31 +112,50 @@ class automate:
         new_trensi = []
         for i in etas:
             nom = nom + i + ","
-            for p in range(len(self.transitions[i])):
-                if self.transitions[i][p] not in new_trensi : 
-                    new_trensi.append(self.transitions[i][p])
         nom = nom.rstrip(nom[1])
         self.add_state(nom)
-        self.transitions[nom].append(new_trensi)
-            
+        
+        for i in etas:
+            for p in range(len(self.transitions[i])):
+                if self.transitions[i][p] not in new_trensi : 
+                    self.add_transition(nom,self.transitions[i][p][0],self.transitions[i][p][1])
+
+        nom = nom.rstrip(nom[1])
+        
 
 
-    def determinisation(self):
+
+    def determiniser(self):
         print("deter")
-        initial = ""
+        initial = []
         if self.est_deterministe1():
             print("super")
-            return
+            return 
         else:
             for i in self.init:
                 print(i)
-                initial = initial + i
-                #self.states.remove(i) #a verifier sur quand les remouve et si il le faut tout cour
-            self.add_state(initial,False)
-            #fusioner les transition a partir des etas initiaux
+                initial.append(i)
+            self.cree_etas_multiple(initial)
+        if self.est_deterministe2():
+            print("tata")
+            return
+        else :
+            for etas in self.states:  
+                vue = []
+                duplicas = []
+                for lettre in range(len(self.transitions[etas])):
+                    if self.transitions[etas][lettre][0] in vue:
+                        duplicas = self.transitions[etas][lettre][0]
+                        print("tata")
+                    else:
+                        vue.append(self.transitions[etas][lettre][0])
+                        print(self.transitions[etas][lettre][0])
+            print(vue,"vue")
+            print(duplicas,"toto")
+
+                        #fusioner les transition a partir des etas initiaux
             #suprimer les etas intiaux (entien)
             #ajouter le nouvelle etas initial
-
             #pour toute trensition duplicative d'un meme etas, crée un nouvelle etas de c'est deux trensition
             
 
@@ -178,9 +197,6 @@ class automate:
             if etas == i:
                 return True
         return False
-                
-
-
 
 def run(automate, word):
     current_state = automate.init
@@ -196,5 +212,7 @@ def run(automate, word):
     if current_state in automate.finals:
         return True
     return False
+
+
 
 

@@ -32,11 +32,9 @@ def lecteurExt1(ligne,tablaux):
             if ligne[i]== ",":
                 tablaux.append(caractaire)
                 caractaire =""
-                print(caractaire,"tata")
 
             else:
                 caractaire = caractaire + ligne[i]
-                print(caractaire,"toto")
 
         if caractaire == "":
 
@@ -56,7 +54,6 @@ def lecteurExt(tablaux):
     return info
 
 
-
 def aujoutautomate(tablaux,automate):
     for i in tablaux[2]:
         automate.add_state(i,True)
@@ -66,6 +63,7 @@ def aujoutautomate(tablaux,automate):
         automate.add_init(i)
     for i in tablaux[1]:
         automate.add_letre(i)
+
 def aujoutetas_ext(ligne,tablaux):
     p = len(ligne) 
 
@@ -114,8 +112,9 @@ aujoutrensition(automate1)
 automate1.completer_automate("poubelle")
 print(automate1)
 #automate1.determinisation()
-automate1.cree_etas_multiple(automate1.init)
+automate1.determiniser()
 print(automate1)
 
 automate1.sauvegarde("toto.txt")
+
 print(automate1.accepte_mot("cbbbaa"))
