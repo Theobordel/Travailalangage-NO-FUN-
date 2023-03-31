@@ -163,11 +163,16 @@ class automate:
                     f.write("delta("+etas+","+str(self.transitions[etas][i][0])+") = "+str(self.transitions[etas][i][1])+"\n")
 
     def to_dot(self):
-        dot = graphviz.diagraph()
+        dot = graphviz.Digraph()
         dot.attr(rankdir="LR")
-        dot.node(self.init, shape="circle")
-        dot.edge(self.init, self.finals, label="epsilon")
-        print(dot)
+        for i in range(len(self.states)):
+            etas = self.states[i]
+            dot.node(etas , shape="circle")
+            for k in range(len(self.transitions[etas])):
+                
+            for j in range(len(self.transitions[etas])):
+                dot.edge(etas, self.transitions[etas][j][1] , label=self.transitions[etas][j][0])
+        print(dot.source)
 
 
     def accepte_mot(self,mot):
