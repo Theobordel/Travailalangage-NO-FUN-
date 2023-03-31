@@ -61,8 +61,6 @@ class automate:
         if dst_state not in self.states:
             print("error : the state '",dst_state,"' is not an existing state.")
             return
-    
-
         self.transitions[src_state].append((symbol, dst_state))
 
     def __str__(self):
@@ -91,10 +89,13 @@ class automate:
                 if trouvee == 0:
                     self.add_transition(etas,self.alphabet[lettre],nom_poubelle)
 
-    def est_deterministe(self):
+    def est_deterministe1(self):
         if self.init != None:
             if len(self.init) != 1:
                 return False
+        return True
+
+    def est_deterministe2(self):
         for etas in self.states:  
             vue = []
             for lettre in range(len(self.transitions[etas])):
@@ -102,15 +103,42 @@ class automate:
                     return False
                 else:
                     vue.append(self.transitions[etas][lettre][0])
-
      
         return True
-    
+        
+    def cree_etas_multiple(self,etas): #etas liste
+        print(etas)
+        nom = ""
+        new_trensi = []
+        for i in etas:
+            nom = nom + i + ","
+            for p in range(len(self.transitions[i])):
+                if self.transitions[i][p] not in new_trensi : 
+                    new_trensi.append(self.transitions[i][p])
+        nom = nom.rstrip(nom[1])
+        self.add_state(nom)
+        self.transitions[nom].append(new_trensi)
+            
+
+
     def determinisation(self):
-        if self.est_deterministe():
+        print("deter")
+        initial = ""
+        if self.est_deterministe1():
+            print("super")
             return
         else:
-            return "determinisation wip"
+            for i in self.init:
+                print(i)
+                initial = initial + i
+                #self.states.remove(i) #a verifier sur quand les remouve et si il le faut tout cour
+            self.add_state(initial,False)
+            #fusioner les transition a partir des etas initiaux
+            #suprimer les etas intiaux (entien)
+            #ajouter le nouvelle etas initial
+
+            #pour toute trensition duplicative d'un meme etas, crée un nouvelle etas de c'est deux trensition
+            
 
     def sauvegarde_ext(self,chose,fichier):
         for i in range(len(chose)):
@@ -137,18 +165,16 @@ class automate:
     def to_dot(self):
         print("wip")
 
+
     def accepte_mot(self,mot):
         etas = self.init[0]
         prochinetas = etas
         for lettre in mot:
             for lettretren in range(len(self.transitions[etas])):
-                print(etas,self.transitions[etas][lettretren][1],lettre)
                 if lettre == self.transitions[etas][lettretren][0]:
                     prochinetas = self.transitions[etas][lettretren][1]
             etas = prochinetas
-        print(etas)
         for i in self.finals:
-            print(i,"toto")
             if etas == i:
                 return True
         return False

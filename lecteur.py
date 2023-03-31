@@ -103,14 +103,6 @@ def aujoutrensition(automate):
     
 
 
-def compléter_automate(automate, mot):
-   if mot.add_state(automate, "a"):
-       if  automate.valid_symbol():
-           if not automate.dst_etat():
-               automate.add_transition(automate, "a")
-
-
-
 
 #print(l) 
 #print(content)
@@ -119,8 +111,11 @@ print(info)
 automate1 = model.automate()
 aujoutautomate(info,automate1)
 aujoutrensition(automate1)
-automate1.completer_automate("p")
+automate1.completer_automate("poubelle")
 print(automate1)
-print(automate1.est_deterministe())
+#automate1.determinisation()
+automate1.cree_etas_multiple(automate1.init)
+print(automate1)
+
 automate1.sauvegarde("toto.txt")
 print(automate1.accepte_mot("cbbbaa"))
